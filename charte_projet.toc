@@ -1,0 +1,17 @@
+\babel@toc {french}{}\relax 
+\contentsline {section}{\numberline {1}Contexte}{2}{section.1}%
+\contentsline {section}{\numberline {2}Objectifs du Projet}{2}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Objectifs Spécifiques}{2}{subsection.2.1}%
+\contentsline {section}{\numberline {3}Vision et Architecture Technique}{2}{section.3}%
+\contentsline {subsection}{\numberline {3.1}L'Architecture}{2}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Spécifications Matérielles}{3}{subsection.3.2}%
+\contentsline {section}{\numberline {4}Fonctionnement par Phase}{3}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Phase I : Identification \& Scan Réseau (Automatisé par le Pi)}{3}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Phase II : Étude de Proximité (Via le Smartphone)}{3}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Phase III : La Checklist de Perquisition}{4}{subsection.4.3}%
+\contentsline {section}{\numberline {5}Génération du Procès-Verbal (PV)}{4}{section.5}%
+\contentsline {section}{\numberline {6}Périmètre}{4}{section.6}%
+\contentsline {section}{\numberline {7}Livrables Attendus}{4}{section.7}%
+\contentsline {section}{\numberline {8}Parties Prenantes}{5}{section.8}%
+\contentsline {section}{\numberline {9}Budget et Ressources}{5}{section.9}%
+\contentsline {section}{\numberline {10}Risques}{5}{section.10}%

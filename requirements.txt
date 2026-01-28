@@ -1,0 +1,7 @@
+customtkinter
+pywifi
+scapy
+geocoder
+requests
+pillow
+bleak

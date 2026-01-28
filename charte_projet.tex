@@ -1,0 +1,229 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{float}
+
+% Configuration des marges
+\geometry{hmargin=2.5cm,vmargin=2.5cm}
+
+% Couleurs personnalisées
+\definecolor{policeBlue}{RGB}{10, 50, 100}
+
+% Configuration des en-têtes et pieds de page
+\pagestyle{fancy}
+\fancyhf{}
+\setlength{\headheight}{50pt}
+\fancyhead[L]{\includegraphics[height=1.5cm]{OFAClogo.jpg}} 
+\fancyhead[R]{\includegraphics[height=2cm]{logo_3il.png}}
+\fancyhead[C]{\textbf{\large PROJET CONSTAT BOX}}
+\fancyfoot[R]{\thepage}
+\fancyfoot[L]{Charte de Projet - Version 2.0}
+\renewcommand{\headrulewidth}{1pt}
+\renewcommand{\footrulewidth}{0.5pt}
+
+% Configuration des titres
+\titleformat{\section}
+{\color{policeBlue}\normalfont\Large\bfseries\uppercase}
+{\thesection}{1em}{}
+\titleformat{\subsection}
+{\color{policeBlue}\normalfont\large\bfseries}
+{\thesubsection}{1em}{}
+
+% Informations du document
+\title{\textbf{\Huge CHARTE DE PROJET}\\ \vspace{0.5cm} \textbf{\Huge CONSTAT BOX}}
+\author{Équipe Étudiants I2 - 3iL Ingénieurs}
+\date{28 Janvier 2026}
+
+\begin{document}
+
+% Page de garde
+\begin{titlepage}
+    \centering
+    \vspace*{1cm}
+    
+    \begin{minipage}{0.45\textwidth}
+        \begin{flushleft}
+            \includegraphics[width=0.6\textwidth]{OFAClogo.jpg}
+        \end{flushleft}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.45\textwidth}
+        \begin{flushright}
+            \includegraphics[width=0.6\textwidth]{logo_3il.png}
+        \end{flushright}
+    \end{minipage}
+    
+    \vspace{4cm}
+    
+    {\Huge \textbf{\color{policeBlue}CHARTE DE PROJET}}\\[1cm]
+    {\Huge \textbf{CONSTAT BOX}}\\[2cm]
+    
+    {\Large \textbf{Version :} 2.0}\\[0.5cm]
+    {\Large \textbf{Date :} 28/01/2026}\\[1cm]
+    
+    \vspace{4cm}
+    
+    \vfill
+    
+    \large
+    \textbf{Client :} OFAC -- Police Nationale\\
+    \textbf{Réalisation :} Étudiants I2 -- 3iL Ingénieurs
+\end{titlepage}
+
+% Sommaire
+\tableofcontents
+\newpage
+
+% 1. CONTEXTE
+\section{Contexte}
+Dans la région Nouvelle-Aquitaine, et plus particulièrement à Limoges, la prolifération des appareils numériques, réseaux domestiques et objets connectés entraîne une augmentation significative des scènes de crime comportant des preuves numériques. 
+
+Les enquêteurs de terrain ne disposent pas toujours des compétences techniques ni des outils adaptés pour effectuer rapidement des constats numériques fiables lors des premières phases d’intervention. Cette situation représente à la fois un problème opérationnel et une opportunité d’innovation.
+
+Le projet \textbf{CONSTAT BOX} vise à développer un kit d’investigation numérique de premier niveau, autonome et sécurisé, capable de capturer l’état d’un réseau domestique (Wi-Fi, Bluetooth, Ethernet) au moment précis de la saisie, tout en respectant les exigences strictes de la chaîne de preuve judiciaire.
+
+% 2. OBJECTIFS
+\section{Objectifs du Projet}
+L’objectif principal est de fournir un support opérationnel fiable permettant de produire des éléments exploitables dans le cadre d’une enquête judiciaire. L'outil doit \textbf{figer et préserver} les preuves numériques présentes sur une scène (réseaux Wi-Fi, appareils connectés, équipements réseaux).
+
+\subsection{Objectifs Spécifiques}
+\begin{itemize}
+    \item \textbf{Autonomie totale :} Système fonctionnant sur batterie, sans dépendance électrique au suspect.
+    \item \textbf{Simplicité :} Interface accessible à des utilisateurs non-spécialistes (OPJ).
+    \item \textbf{Intégrité :} Mécanismes de hachage (SHA-256) pour garantir l'inaltérabilité des preuves.
+    \item \textbf{Discrétion ("Zéro Trace") :} Minimiser l'empreinte sur le réseau analysé.
+\end{itemize}
+
+% 3. VISION ET ARCHITECTURE DU SYSTÈME (NOUVEAU)
+\section{Vision et Architecture Technique}
+Le projet évolue vers une architecture client-serveur locale, assurant une parfaite isolation et l'absence de dépendance au Cloud. Le Raspberry Pi agit comme une "sonde" technique fixe, tandis que le smartphone de l'enquêteur sert d'interface mobile et de capteur d'appoint.
+
+\subsection{L'Architecture}
+\begin{enumerate}
+    \item \textbf{Le Cerveau (L'Unité Centrale - Raspberry Pi 5) :}
+    \begin{itemize}
+        \item Branché en RJ45 à la box Internet du suspect.
+        \item Exécute les scans lourds (IP, ARP, Wireshark, interrogation API Box).
+        \item Héberge le serveur Web local et la base de données.
+    \end{itemize}
+    
+    \item \textbf{L'Interface (Smartphone / Tablette) :}
+    \begin{itemize}
+        \item Connectée au Wi-Fi de la box ou au point d'accès sécurisé du Pi.
+        \item Permet à l'enquêteur de piloter la perquisition via une Web App responsive.
+    \end{itemize}
+    
+    \item \textbf{Le Capteur Mobile :}
+    \begin{itemize}
+        \item Le téléphone utilise ses propres capteurs pour scanner le Bluetooth environnant (objets connectés, montres, trackers).
+        \item Prend des photos des dispositifs découverts pour les joindre au rapport.
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Spécifications Matérielles}
+Pour répondre aux exigences de rapidité et de "Zéro Trace", le matériel suivant est requis :
+\begin{itemize}
+    \item \textbf{Calcul :} Raspberry Pi 5 (8 Go RAM) pour gérer les scans lourds et le chiffrement rapide.
+    \item \textbf{Refroidissement :} Boîtier avec refroidissement actif indispensable.
+    \item \textbf{Connexion :} Câble Ethernet Blindé (RJ45 Cat 6a) et Adaptateur Wi-Fi haute puissance (Monitor Mode).
+    \item \textbf{Stockage :} Carte MicroSD Haute Vitesse (V30) pour l'OS (Kali Linux) et Clé USB 64 Go pour l'export "propre" des preuves.
+    \item \textbf{Énergie :} Batterie externe (Power Bank) 20 000 mAh (Sortie 25W) pour une autonomie totale, avec câble USB-C à interrupteur physique.
+\end{itemize}
+
+% 4. DÉROULEMENT TECHNIQUE
+\section{Fonctionnement par Phase}
+
+\subsection{Phase I : Identification \& Scan Réseau (Automatisé par le Pi)}
+\begin{itemize}
+    \item \textbf{Scan Passif \& Actif :} Analyse ARP pour lister les machines, y compris celles bloquant le "ping".
+    \item \textbf{Détection de "Fantômes" :} Identification d'IP sans adresse MAC physique évidente (VM, serveurs cachés).
+    \item \textbf{Analyse de Trafic :} Capture Wireshark pour identifier les comportements (ex: flux flux vidéo = caméra IP).
+    \item \textbf{API FAI :} Interrogation directe des Box (Orange, Free, SFR...) pour récupérer baux DHCP et historiques.
+\end{itemize}
+
+\subsection{Phase II : Étude de Proximité (Via le Smartphone)}
+\begin{itemize}
+    \item \textbf{Scan Bluetooth :} Détection des objets à proximité immédiate de l'enquêteur.
+    \item \textbf{Documentation Photo :} Chaque appareil détecté génère une "fiche technique". L'enquêteur prend une photo via l'app, qui est immédiatement hachée et stockée sur le Pi.
+\end{itemize}
+
+\subsection{Phase III : La Checklist de Perquisition}
+C'est le cœur métier de l'outil. L'application confronte la vision réseau à la réalité physique.
+\begin{itemize}
+    \item \textbf{Fiches Dynamiques :} Une fiche par IP/MAC détectée.
+    \item \textbf{Mode Checklist :} L'OPJ valide ("coche") chaque appareil physiquement saisi.
+    \item \textbf{Alertes Exotiques :} Notification immédiate en cas de détection suspecte (VPN, Proxy, MAC Randomization).
+\end{itemize}
+
+\section{Génération du Procès-Verbal (PV)}
+L'application automatise la rédaction administrative pour garantir la validité juridique :
+\begin{itemize}
+    \item \textbf{Horodatage Certifié :} Vérification croisée (Box / Système / Heure réelle) pour éviter toute manipulation.
+    \item \textbf{Rédaction Automatique :} Génération d'un texte structuré prémâché (e.g., \textit{"Le [Date] à [Heure], l'analyse a révélé..."}).
+    \item \textbf{Assistance IA :} Suggestion d'identification pour les appareils inconnus (signature réseau).
+\end{itemize}
+
+% 5. PÉRIMÈTRE
+\section{Périmètre}
+\textbf{Inclus :}
+\begin{itemize}
+    \item Développement de l'outil d'analyse réseau autonome (Backend Python/Kali).
+    \item Interface Web responsive pour smartphone/tablette.
+    \item Création de l'image système sécurisée (Raspberry Pi).
+    \item Système de génération de rapports chiffrés et horodatés.
+    \item Documentation technique et guide utilisateur.
+\end{itemize}
+
+\textbf{Exclus (ou optionnel) :}
+\begin{itemize}
+    \item Analyse des réseaux cellulaires (GSM/4G/5G).
+    \item Analyse forensique approfondie (récupération de données effacées sur les disques durs saisis). Mots de passe Wi-Fi (cracking).
+\end{itemize}
+
+% 6. LIVRABLES
+\section{Livrables Attendus}
+\begin{enumerate}
+    \item Une \textbf{sonde "ConstatBox"} (Raspberry Pi configuré) prête à l'emploi.
+    \item Une \textbf{Application Web} de pilotage, déployée localement sur la sonde.
+    \item Un module de génération de rapports PDF/PV.
+    \item Une documentation technique d'installation et de maintenance.
+    \item Un manuel utilisateur simplifié pour les enquêteurs.
+    \item Une démonstration fonctionnelle du prototype final.
+\end{enumerate}
+
+% 7. PARTIES PRENANTES
+\section{Parties Prenantes}
+\begin{itemize}
+    \item \textbf{Client / Expert Métier :} OFAC -- Police Nationale (Valide les besoins fonctionnels et juridiques).
+    \item \textbf{Réalisation :} Étudiants I2 -- 3iL Ingénieurs (Conception et développement).
+    \item \textbf{Supervision :} Encadrants pédagogiques 3iL.
+    \item \textbf{Utilisateurs Finaux :} Enquêteurs de terrain / OPJ.
+\end{itemize}
+
+% 8. BUDGET ET RESSOURCES
+\section{Budget et Ressources}
+Le projet s'inscrit dans un cadre pédagogique.
+\begin{itemize}
+    \item \textbf{Budget :} Limité, valorisation du temps de travail de l'équipe.
+    \item \textbf{Matériel :} Utilisation de matériel existant ou acquisition à faible coût (Raspberry Pi 5, Accessoires réseau, Power Bank).
+    \item \textbf{Logiciel :} Solutions Open Source privilégiées (Kali Linux, Python, Wireshark).
+\end{itemize}
+
+% 9. RISQUES
+\section{Risques}
+\begin{itemize}
+    \item \textbf{Juridique :} Non-conformité des rapports aux exigences de procédure pénale. \textit{Mitigation : Validation régulière avec l'OFAC.}
+    \item \textbf{Technique :} Instabilité de l'analyse réseau ou surchauffe du matériel. \textit{Mitigation : Choix du Pi 5 avec refroidissement actif et tests intensifs.}
+    \item \textbf{Sécuritaire :} Compromission des données saisies. \textit{Mitigation : Chiffrement et hachage systématique.}
+    \item \textbf{Calendaire :} Contraintes académiques fortes. \textit{Mitigation : Méthodologie Agile et priorisation des features (MoSCoW).}
+\end{itemize}
+
+\end{document}
