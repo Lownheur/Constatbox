@@ -1,0 +1,166 @@
+{
+    "timestamp": "2026-02-02T23:26:51.708320",
+    "devices": [
+        {
+            "ip": "192.168.1.254",
+            "hostname": "Unknown",
+            "mac": "6C:BA:B8:08:72:2C",
+            "vendor": "Sagemcom Broadband SAS",
+            "type": "Infrastructure (Router/AP)",
+            "is_gateway": true,
+            "open_ports": []
+        }
+    ],
+    "wifi": [
+        {
+            "ssid": "Bbox-1C5097AA",
+            "signal": "77%",
+            "security": "WPA2"
+        },
+        {
+            "ssid": "Bbox-2858458F",
+            "signal": "64%",
+            "security": "WPA2"
+        },
+        {
+            "ssid": "SFR_4400",
+            "signal": "64%",
+            "security": "WPA1 WPA2"
+        },
+        {
+            "ssid": "SFR_6E8F",
+            "signal": "54%",
+            "security": "WPA1 WPA2"
+        },
+        {
+            "ssid": "Nostromo",
+            "signal": "47%",
+            "security": "WPA2"
+        },
+        {
+            "ssid": "Bbox-541FAA4A",
+            "signal": "44%",
+            "security": "WPA2"
+        },
+        {
+            "ssid": "Galaxy A16 E3B5",
+            "signal": "40%",
+            "security": "WPA2"
+        },
+        {
+            "ssid": "Bbox-1082F82F",
+            "signal": "40%",
+            "security": "WPA1 WPA2"
+        },
+        {
+            "ssid": "Freebox-7759F3",
+            "signal": "40%",
+            "security": "WPA2"
+        },
+        {
+            "ssid": "SFR_B51F",
+            "signal": "37%",
+            "security": "WPA1 WPA2"
+        },
+        {
+            "ssid": "SFR_4400_5GHZ",
+            "signal": "37%",
+            "security": "WPA1 WPA2"
+        },
+        {
+            "ssid": "FREEBOX_MALUK_JI",
+            "signal": "34%",
+            "security": "WPA1 WPA2"
+        },
+        {
+            "ssid": "Sulaco",
+            "signal": "30%",
+            "security": "WPA2"
+        },
+        {
+            "ssid": "Freebox-56DBC0",
+            "signal": "30%",
+            "security": "WPA2"
+        },
+        {
+            "ssid": "Galaxy A53 5G 11A1",
+            "signal": "30%",
+            "security": "WPA2"
+        },
+        {
+            "ssid": "jflb",
+            "signal": "30%",
+            "security": "WPA2"
+        },
+        {
+            "ssid": "Bbox-389F62F7",
+            "signal": "29%",
+            "security": "WPA2"
+        },
+        {
+            "ssid": "SFR_6F71",
+            "signal": "27%",
+            "security": "WPA1 WPA2"
+        },
+        {
+            "ssid": "Moto",
+            "signal": "27%",
+            "security": "WPA2"
+        },
+        {
+            "ssid": "Freebox-264BD8",
+            "signal": "27%",
+            "security": "WPA2"
+        },
+        {
+            "ssid": "DIRECT-2E-HP DeskJet 2700 series",
+            "signal": "25%",
+            "security": "WPA2"
+        },
+        {
+            "ssid": "SFR_07EF",
+            "signal": "24%",
+            "security": "WPA1 WPA2"
+        },
+        {
+            "ssid": "Bbox-51D14DD0",
+            "signal": "24%",
+            "security": "WPA2"
+        },
+        {
+            "ssid": "Freebox-511B74",
+            "signal": "24%",
+            "security": "WPA2"
+        },
+        {
+            "ssid": "Livebox-E240",
+            "signal": "24%",
+            "security": "WPA2"
+        },
+        {
+            "ssid": "SFR_5F8F",
+            "signal": "20%",
+            "security": "WPA1 WPA2"
+        },
+        {
+            "ssid": "Bbox-DE85287C",
+            "signal": "20%",
+            "security": "WPA2"
+        },
+        {
+            "ssid": "SFR_C5E0",
+            "signal": "20%",
+            "security": "WPA1 WPA2"
+        },
+        {
+            "ssid": "SFR_604F",
+            "signal": "14%",
+            "security": "WPA1 WPA2"
+        },
+        {
+            "ssid": "AQyAfpe-7915",
+            "signal": "0%",
+            "security": "WPA2"
+        }
+    ]
+}

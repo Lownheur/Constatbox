@@ -1,0 +1,116 @@
+{
+    "timestamp": "2026-02-03T14:24:58.886996",
+    "network_info": {
+        "interface": "wlo1",
+        "network": "10.42.0.0/24",
+        "gateway": "10.42.0.1"
+    },
+    "devices": [
+        {
+            "ip": "10.42.0.1",
+            "hostname": "Unknown",
+            "mac": "E4:5F:01:69:03:FE",
+            "vendor": "Raspberry Pi Trading Ltd",
+            "type": "IoT/Embedded",
+            "is_gateway": true,
+            "open_ports": []
+        }
+    ],
+    "wifi": [
+        {
+            "ssid": "Ben Bruno\ud83c\udfc5",
+            "signal": "100%",
+            "security": "WPA2 WPA3"
+        },
+        {
+            "ssid": "STUDENTS",
+            "signal": "97%",
+            "security": "WPA2"
+        },
+        {
+            "ssid": "GUESTS",
+            "signal": "97%",
+            "security": "WPA2"
+        },
+        {
+            "ssid": "Wifi_Raspberry",
+            "signal": "87%",
+            "security": "WPA2"
+        },
+        {
+            "ssid": "dlink",
+            "signal": "70%",
+            "security": ""
+        },
+        {
+            "ssid": "RSPOT",
+            "signal": "67%",
+            "security": "WPA1 WPA2"
+        },
+        {
+            "ssid": "gina",
+            "signal": "64%",
+            "security": "WPA2"
+        },
+        {
+            "ssid": "hw_manage_ce20",
+            "signal": "57%",
+            "security": "WPA2"
+        },
+        {
+            "ssid": "hw_manage_bbc0",
+            "signal": "57%",
+            "security": "WPA2"
+        },
+        {
+            "ssid": "EBBAD26A-@E82LHkj9g1AOfw",
+            "signal": "54%",
+            "security": "WPA2"
+        },
+        {
+            "ssid": "PERMANENTS",
+            "signal": "50%",
+            "security": "WPA2"
+        },
+        {
+            "ssid": "MSPOT",
+            "signal": "47%",
+            "security": "WPA1 WPA2"
+        },
+        {
+            "ssid": "MSPOTX2",
+            "signal": "42%",
+            "security": "WPA1 WPA2"
+        },
+        {
+            "ssid": "EBBAEA96-@E82LHkkgM1AOPP",
+            "signal": "37%",
+            "security": "WPA2"
+        },
+        {
+            "ssid": "DSPOT2",
+            "signal": "34%",
+            "security": "WPA2"
+        },
+        {
+            "ssid": "RSV4_power",
+            "signal": "24%",
+            "security": "WPA2"
+        },
+        {
+            "ssid": "Galaxy A56 5G 6FF9",
+            "signal": "20%",
+            "security": "WPA2"
+        },
+        {
+            "ssid": "Pixel9a",
+            "signal": "17%",
+            "security": "WPA2"
+        }
+    ],
+    "stats": {
+        "dns_queries": 1,
+        "external_alerts": 43,
+        "total_packets": 113
+    }
+}

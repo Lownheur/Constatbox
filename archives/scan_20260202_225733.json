@@ -1,0 +1,78 @@
+{
+    "timestamp": "2026-02-02T22:57:45.402399",
+    "devices": [
+        {
+            "ip": "192.168.1.6",
+            "hostname": "Unknown",
+            "mac": "B6:1E:78:19:E7:2D",
+            "vendor": "b6:1e:78:19:e7:2d",
+            "type": "Mobile (Privacy Mode)",
+            "is_gateway": false,
+            "open_ports": []
+        },
+        {
+            "ip": "192.168.1.70",
+            "hostname": "Unknown",
+            "mac": "70:66:55:C0:E7:55",
+            "vendor": "AzureWave Technology Inc.",
+            "type": "Station/Workstation",
+            "is_gateway": false,
+            "open_ports": []
+        },
+        {
+            "ip": "192.168.1.167",
+            "hostname": "Unknown",
+            "mac": "30:E3:A4:CF:80:6E",
+            "vendor": "30:e3:a4:cf:80:6e",
+            "type": "Station/Workstation",
+            "is_gateway": false,
+            "open_ports": []
+        },
+        {
+            "ip": "192.168.1.254",
+            "hostname": "Unknown",
+            "mac": "6C:BA:B8:08:72:2C",
+            "vendor": "Sagemcom Broadband SAS",
+            "type": "Infrastructure (Router/AP)",
+            "is_gateway": true,
+            "open_ports": []
+        }
+    ],
+    "wifi": [
+        {
+            "ssid": "Bbox-1C5097AA",
+            "signal": "74%",
+            "security": "WPA2"
+        },
+        {
+            "ssid": "Bbox-2858458F",
+            "signal": "67%",
+            "security": "WPA2"
+        },
+        {
+            "ssid": "SFR_6E8F",
+            "signal": "64%",
+            "security": "WPA1 WPA2"
+        },
+        {
+            "ssid": "Nostromo",
+            "signal": "47%",
+            "security": "WPA2"
+        },
+        {
+            "ssid": "Bbox-1082F82F",
+            "signal": "40%",
+            "security": "WPA1 WPA2"
+        },
+        {
+            "ssid": "Galaxy A53 5G 11A1",
+            "signal": "34%",
+            "security": "WPA2"
+        },
+        {
+            "ssid": "Bbox-389F62F7",
+            "signal": "27%",
+            "security": "WPA2"
+        }
+    ]
+}
