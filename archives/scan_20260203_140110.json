@@ -1,0 +1,86 @@
+{
+    "timestamp": "2026-02-03T14:01:10.088985",
+    "network_info": {
+        "interface": "wlo1",
+        "network": "172.20.163.0/24",
+        "gateway": "172.20.163.239"
+    },
+    "devices": [],
+    "wifi": [
+        {
+            "ssid": "Redmi Note 11",
+            "signal": "97%",
+            "security": "WPA2"
+        },
+        {
+            "ssid": "GUESTS",
+            "signal": "89%",
+            "security": "WPA2"
+        },
+        {
+            "ssid": "STUDENTS",
+            "signal": "89%",
+            "security": "WPA2"
+        },
+        {
+            "ssid": "PocketWifi",
+            "signal": "77%",
+            "security": "WPA2"
+        },
+        {
+            "ssid": "dlink",
+            "signal": "77%",
+            "security": ""
+        },
+        {
+            "ssid": "MSI 2614",
+            "signal": "70%",
+            "security": "WPA2"
+        },
+        {
+            "ssid": "gina",
+            "signal": "64%",
+            "security": "WPA2"
+        },
+        {
+            "ssid": "RSPOT",
+            "signal": "64%",
+            "security": "WPA1 WPA2"
+        },
+        {
+            "ssid": "EBBAD26A-@E82LHkj9g1AOfw",
+            "signal": "57%",
+            "security": "WPA2"
+        },
+        {
+            "ssid": "Ben Bruno\ud83c\udfc5",
+            "signal": "55%",
+            "security": "WPA2 WPA3"
+        },
+        {
+            "ssid": "hw_manage_64f0",
+            "signal": "47%",
+            "security": "WPA2"
+        },
+        {
+            "ssid": "hw_manage_ce20",
+            "signal": "37%",
+            "security": "WPA2"
+        },
+        {
+            "ssid": "PERMANENTS",
+            "signal": "34%",
+            "security": "WPA2"
+        },
+        {
+            "ssid": "MSPOTX2",
+            "signal": "20%",
+            "security": "WPA1 WPA2"
+        }
+    ],
+    "stats": {
+        "dns_queries": 0,
+        "external_alerts": 47,
+        "total_packets": 627
+    }
+}
