@@ -1,0 +1,81 @@
+CONSTATABOX - GUIDE D’INSTALLATION ET D’EXECUTION
+
+1. FICHIER requirements.txt
+
+Créer un fichier nommé requirements.txt à la racine du projet avec le
+contenu suivant :
+
+scapy flask flask-cors requests
+
+Rôle des bibliothèques : - scapy : Scan ARP, sniffing, analyse de
+paquets - flask : Serveur web backend - flask-cors : Autoriser les
+requêtes cross-origin - requests : Requêtes HTTP
+
+------------------------------------------------------------------------
+
+2. INSTALLATION DU PROJET
+
+A. Cloner le dépôt
+
+git clone https://github.com/Lownheur/Constatbox.git cd Constatbox git
+checkout devTest
+
+B. Créer un environnement virtuel (recommandé)
+
+python3 -m venv .venv source .venv/bin/activate
+
+Vérifier l’environnement :
+
+which python
+
+Résultat attendu : …/Constatbox/.venv/bin/python
+
+C. Installer les dépendances
+
+pip install -r requirements.txt
+
+------------------------------------------------------------------------
+
+3. EXECUTION DES SCRIPTS
+
+A. Lancer le scanner réseau (nécessite sudo)
+
+sudo .venv/bin/python3 ScanReseau.py
+
+B. Lancer le serveur Flask
+
+source .venv/bin/activate python3 app.py
+
+Ouvrir dans le navigateur : http://localhost:5000
+
+------------------------------------------------------------------------
+
+4. CONFIGURATION DE L’INTERFACE RESEAU
+
+Dans ScanReseau.py :
+
+interface = “wlo1”
+
+Valeurs possibles : eth0 wlan0 enp0s3 wlp2s0
+
+Pour vérifier l’interface disponible :
+
+ip a
+
+------------------------------------------------------------------------
+
+5. PROBLEMES COURANTS
+
+Si Scapy ne fonctionne pas :
+
+sudo apt install tcpdump sudo setcap cap_net_raw,cap_net_admin=eip
+$(which python3)
+
+Si Flask introuvable :
+
+pip install flask pip install -r requirements.txt
+
+
+FIN DU GUIDE
+
+Bruno ELPROFESOR vous dis à bientôt 
