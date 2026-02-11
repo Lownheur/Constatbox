@@ -5,16 +5,52 @@ Created on Tue Feb  3 00:14:38 2026
 
 @author: benbruno
 """
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template, request, redirect, url_for, session
 from flask_cors import CORS
 from scapy.all import rdpcap, IP
 import os
 import json
 from collections import Counter
-import geoip2.database  # Bibliothèque pour la géolocalisation
+import geoip2.database
+from functools import wraps
 
 app = Flask(__name__)
+app.secret_key = 'super_secret_forensic_key_change_me_in_prod'
 CORS(app)
+
+# --- LOGIN DECORATOR ---
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'logged_in' not in session:
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return decorated_function
+
+# --- AUTH ROUTES ---
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    error = None
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        if username == 'constatbox' and password == 'constatbox':
+            session['logged_in'] = True
+            return redirect(url_for('index'))
+        else:
+            error = 'ACCESS DENIED: Invalid Credentials'
+            
+    return render_template('login.html', error=error, remote_ip=request.remote_addr)
+
+@app.route('/logout')
+def logout():
+    session.pop('logged_in', None)
+    return redirect(url_for('login'))
+
+@app.route('/')
+@login_required
+def index():
+    return render_template('index.html')
 
 ARCHIVE_DIR = "archives"
 # Chemin vers la base de données de pays (à télécharger sur MaxMind)
@@ -115,6 +151,19 @@ def list_archives():
     """Liste tous les scans disponibles."""
     files = [f for f in os.listdir(ARCHIVE_DIR) if f.endswith('.json')]
     return jsonify(sorted(files, reverse=True))
+
+@app.route('/api/scan/<filename>', methods=['GET'])
+def get_scan_detail(filename):
+    """Renvoie le détail d'un scan JSON spécifique."""
+    file_path = os.path.join(ARCHIVE_DIR, filename)
+    if not os.path.exists(file_path):
+        return jsonify({"error": "Fichier non trouvé"}), 404
+    try:
+        with open(file_path, 'r') as f:
+            data = json.load(f)
+        return jsonify(data)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
     print("-------------------------------------------------------")

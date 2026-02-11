@@ -1,1 +1,7 @@
 flask
+flask-cors
+scapy
+geoip2
+python-nmap
+netifaces
+requests
